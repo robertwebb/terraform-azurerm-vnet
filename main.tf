@@ -51,3 +51,15 @@ resource azurerm_virtual_network virtualNetworks {
     }
   }
 }
+
+#============================================================
+# Create one or more Network Security Groups
+#============================================================
+resource azurerm_network_security_group securityGroups {
+  count               = length(var.networkSecurityGroups)
+  resource_group_name = azurerm_resource_group.vnet-rg.name
+  location            = azurerm_resource_group.vnet-rg.location
+  name                = var.networkSecurityGroups[count.index].name
+  tags                = var.resourceTags
+  security_rule       = var.networkSecurityGroups[count.index].securityRules
+}
